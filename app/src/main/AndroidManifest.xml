@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.single.code.keepalive" >
+    <uses-permission
+        android:name="android.permission.AUTHENTICATE_ACCOUNTS"
+        android:maxSdkVersion="22" />
+    <uses-permission
+        android:name="android.permission.GET_ACCOUNTS"
+        android:maxSdkVersion="22" />
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.single.code.ui.MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.KeepActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity="com.enjoy.daemon.keep"
+            android:theme="@style/KeepTheme" />
+
+        <service android:name=".service.StickyService" />
+
+
+        <service android:name=".account.AuthenticationService">
+            <!--<action android:name="android.accounts.AccountAuthenticator" /> 让系统能够找到这个账户服务-->
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/account_authenticator" />
+        </service>
+
+        <service android:name=".account.SyncService">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/sync_adapter" />
+        </service>
+
+        <provider
+            android:name=".account.SyncProvider"
+            android:authorities="com.single.code.keepalive.account.provider" />
+
+        <service
+            android:name=".process.LocalService"
+            android:exported="true" />
+        <service
+            android:name=".process.LocalService$InnerService"
+            android:exported="true" />
+        <service
+            android:name=".process.RemoteService"
+            android:exported="true"
+            android:process=":remote" />
+        <service
+            android:name=".process.RemoteService$InnerService"
+            android:exported="true"
+            android:process=":remote" />
+        <service android:name=".jobscheduler.ZJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+
+        <service
+            android:name=".service.ForegroundDaemonService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":daemon_service" />
+        <!--注册前台服务的小弟，取消通知服务，进程在notice_service-->
+        <service
+            android:name=".service.CancelNoticeService"
+            android:enabled="true"
+            android:exported="false"
+            android:process=":notices_service" />
+    </application>
+
+</manifest>

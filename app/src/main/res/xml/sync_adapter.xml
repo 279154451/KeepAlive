@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="com.single.code.keepalive.account"
+    android:allowParallelSyncs="true"
+    android:contentAuthority="com.single.code.keepalive.account.provider"
+    android:isAlwaysSyncable="true"
+    android:userVisible="false" />
+
+    <!-- allowParallelSyncs 是否支持多账号同时同步-->
+
+    <!--contentAuthority 指定要同步的 ContentProvider-->
+
+    <!--android:userVisible 显示开关按钮 给用户控制-->
