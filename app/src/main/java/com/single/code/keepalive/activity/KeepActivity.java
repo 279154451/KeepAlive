@@ -7,6 +7,9 @@ import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.single.code.keepalive.R;
+import com.single.code.keepalive.media.MediaPlayerHelper;
+
 import androidx.annotation.Nullable;
 
 public class KeepActivity extends Activity {
@@ -30,11 +33,14 @@ public class KeepActivity extends Activity {
         setFinishOnTouchOutside(true);
         // KeepActivity 创建一个弱引用
         KeepManager.getInstance().setKeep(this);
+        //灭屏播放无声音乐，可有效避免CPU休眠导致socket断开等问题，缺点是耗电
+        MediaPlayerHelper.getInstance().startMediaPlayer(this,"silent", R.raw.silent,true,null);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.e(TAG, "关闭keep");
+        MediaPlayerHelper.getInstance().releaseMediaPlayer("silent");
     }
 }
